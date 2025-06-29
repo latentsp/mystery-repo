@@ -23,7 +23,11 @@ tasks.test {
 }
 
 tasks.withType<JavaExec> {
-    jvmArgs = listOf("-Xmx1024m", "-Xms256m")
+    jvmArgs = listOf(
+        "-Xmx1024m", 
+        "-Xms256m",
+        "-XX:-HeapDumpOnOutOfMemoryError"  // Disable heap dumps
+    )
 }
 
 kotlin {

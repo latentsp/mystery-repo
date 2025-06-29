@@ -177,3 +177,9 @@ Here are some ideas to extend this project:
 ## License
 
 This project is open source and available under the MIT License. 
+
+
+
+./gradlew distZip
+unzip build/distributions/mystery-repo-1.0-SNAPSHOT.zip
+./mystery-repo-1.0-SNAPSHOT/bin/mystery-repo
