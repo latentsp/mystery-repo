@@ -11,7 +11,14 @@ class TodoManagerTest {
     
     @BeforeEach
     fun setup() {
-        todoManager = TodoManager()
+        val config = AppConfig(
+            dataFilePath = "test-tasks.txt",
+            maxTaskDescriptionLength = 500,
+            autoSave = false,
+            backupEnabled = false,
+            maxBackupFiles = 5
+        )
+        todoManager = TodoManager(config)
     }
     
     @Test

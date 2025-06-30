@@ -4,17 +4,24 @@ import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TodoManager {
+class TodoManager(private val config: AppConfig) {
     private val tasks = mutableListOf<Task>()
-    private val filePath = "tasks.txt"
     
     fun addTask(description: String): Result<Task> {
         return try {
             require(description.isNotBlank()) { "Task description cannot be empty" }
-            require(description.length <= 500) { "Task description too long (max 500 chars)" }
+            require(description.length <= config.maxTaskDescriptionLength) { 
+                "Task description too long (max ${config.maxTaskDescriptionLength} chars)" 
+            }
             
             val task = Task(description.trim(), false, LocalDateTime.now())
             tasks.add(task)
+            
+            // Auto-save if enabled
+            if (config.autoSave) {
+                saveToFile()
+            }
+            
             Result.success(task)
         } catch (e: Exception) {
             Result.failure(e)
@@ -24,6 +31,12 @@ class TodoManager {
     fun completeTask(index: Int): Boolean {
         return if (index in tasks.indices) {
             tasks[index].isCompleted = true
+            
+            // Auto-save if enabled
+            if (config.autoSave) {
+                saveToFile()
+            }
+            
             true
         } else {
             false
@@ -33,6 +46,12 @@ class TodoManager {
     fun deleteTask(index: Int): Boolean {
         return if (index in tasks.indices) {
             tasks.removeAt(index)
+            
+            // Auto-save if enabled
+            if (config.autoSave) {
+                saveToFile()
+            }
+            
             true
         } else {
             false
@@ -45,13 +64,19 @@ class TodoManager {
     
     fun saveToFile(): Result<Unit> {
         return try {
-            val file = File(filePath)
+            val file = File(config.dataFilePath)
             file.parentFile?.mkdirs() // Create directories if needed
             
             val content = tasks.joinToString("\n") { task ->
                 "${task.description}|${task.isCompleted}|${task.createdAt}"
             }
             file.writeText(content)
+            
+            // Create backup if enabled
+            if (config.backupEnabled) {
+                createBackup()
+            }
+            
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -60,7 +85,7 @@ class TodoManager {
     
     fun loadFromFile(): Result<Unit> {
         return try {
-            val file = File(filePath)
+            val file = File(config.dataFilePath)
             if (!file.exists()) {
                 return Result.success(Unit)
             }
@@ -84,6 +109,34 @@ class TodoManager {
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+    
+    private fun createBackup() {
+        try {
+            val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
+            val backupDir = File("backups")
+            backupDir.mkdirs()
+            
+            val backupFile = File(backupDir, "${config.dataFilePath}_backup_$timestamp")
+            val originalFile = File(config.dataFilePath)
+            
+            if (originalFile.exists()) {
+                originalFile.copyTo(backupFile)
+                
+                // Clean up old backups if we have too many
+                val backupFiles = backupDir.listFiles { file ->
+                    file.name.startsWith("${config.dataFilePath}_backup_")
+                }?.sortedByDescending { it.lastModified() }
+                
+                backupFiles?.let { files ->
+                    if (files.size > config.maxBackupFiles) {
+                        files.drop(config.maxBackupFiles).forEach { it.delete() }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            println("Warning: Failed to create backup: ${e.message}")
         }
     }
     
