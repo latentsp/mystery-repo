@@ -8,9 +8,17 @@ class TodoManager {
     private val tasks = mutableListOf<Task>()
     private val filePath = "tasks.txt"
     
-    fun addTask(description: String) {
-        val task = Task(description, false, LocalDateTime.now())
-        tasks.add(task)
+    fun addTask(description: String): Result<Task> {
+        return try {
+            require(description.isNotBlank()) { "Task description cannot be empty" }
+            require(description.length <= 500) { "Task description too long (max 500 chars)" }
+            
+            val task = Task(description.trim(), false, LocalDateTime.now())
+            tasks.add(task)
+            Result.success(task)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
     
     fun completeTask(index: Int): Boolean {
@@ -35,33 +43,47 @@ class TodoManager {
         return tasks.toList()
     }
     
-    fun saveToFile() {
-        val file = File(filePath)
-        file.writeText("")
-        
-        tasks.forEach { task ->
-            val line = "${task.description}|${task.isCompleted}|${task.createdAt}"
-            file.appendText("$line\n")
+    fun saveToFile(): Result<Unit> {
+        return try {
+            val file = File(filePath)
+            file.parentFile?.mkdirs() // Create directories if needed
+            
+            val content = tasks.joinToString("\n") { task ->
+                "${task.description}|${task.isCompleted}|${task.createdAt}"
+            }
+            file.writeText(content)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
     
-    fun loadFromFile() {
-        val file = File(filePath)
-        if (!file.exists()) {
-            return
-        }
-        
-        tasks.clear()
-        file.readLines().forEach { line ->
-            if (line.isNotBlank()) {
-                val parts = line.split("|")
-                if (parts.size >= 3) {
-                    val description = parts[0]
-                    val isCompleted = parts[1].toBoolean()
-                    val createdAt = LocalDateTime.parse(parts[2])
-                    tasks.add(Task(description, isCompleted, createdAt))
+    fun loadFromFile(): Result<Unit> {
+        return try {
+            val file = File(filePath)
+            if (!file.exists()) {
+                return Result.success(Unit)
+            }
+            
+            tasks.clear()
+            file.readLines().forEachIndexed { lineNumber, line ->
+                if (line.isNotBlank()) {
+                    val parts = line.split("|")
+                    if (parts.size >= 3) {
+                        try {
+                            val description = parts[0]
+                            val isCompleted = parts[1].toBoolean()
+                            val createdAt = LocalDateTime.parse(parts[2])
+                            tasks.add(Task(description, isCompleted, createdAt))
+                        } catch (e: Exception) {
+                            println("Warning: Skipping invalid line ${lineNumber + 1}: ${e.message}")
+                        }
+                    }
                 }
             }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
     
