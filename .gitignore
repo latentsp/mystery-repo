@@ -55,3 +55,5 @@ mystery-repo-1.0-SNAPSHOT/
 # Temporary files
 *.tmp
 *.temp 
+my-tasks.txt
+backups/

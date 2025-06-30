@@ -3,12 +3,16 @@ package com.todo
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import mu.KotlinLogging
 
-class TodoManager(private val config: AppConfig) {
+class TodoManager(private val config: AppConfig = ConfigManager.loadConfig()) {
+    private val logger = KotlinLogging.logger {}
     private val tasks = mutableListOf<Task>()
+    private val filePath = config.dataFilePath
     
     fun addTask(description: String): Result<Task> {
         return try {
+            logger.info { "Adding new task: ${description.take(50)}..." }
             require(description.isNotBlank()) { "Task description cannot be empty" }
             require(description.length <= config.maxTaskDescriptionLength) { 
                 "Task description too long (max ${config.maxTaskDescriptionLength} chars)" 
@@ -22,8 +26,10 @@ class TodoManager(private val config: AppConfig) {
                 saveToFile()
             }
             
+            logger.debug { "Task added successfully. Total tasks: ${tasks.size}" }
             Result.success(task)
         } catch (e: Exception) {
+            logger.error(e) { "Failed to add task: ${e.message}" }
             Result.failure(e)
         }
     }
@@ -64,7 +70,7 @@ class TodoManager(private val config: AppConfig) {
     
     fun saveToFile(): Result<Unit> {
         return try {
-            val file = File(config.dataFilePath)
+            val file = File(filePath)
             file.parentFile?.mkdirs() // Create directories if needed
             
             val content = tasks.joinToString("\n") { task ->
@@ -85,7 +91,7 @@ class TodoManager(private val config: AppConfig) {
     
     fun loadFromFile(): Result<Unit> {
         return try {
-            val file = File(config.dataFilePath)
+            val file = File(filePath)
             if (!file.exists()) {
                 return Result.success(Unit)
             }
@@ -118,15 +124,15 @@ class TodoManager(private val config: AppConfig) {
             val backupDir = File("backups")
             backupDir.mkdirs()
             
-            val backupFile = File(backupDir, "${config.dataFilePath}_backup_$timestamp")
-            val originalFile = File(config.dataFilePath)
+            val backupFile = File(backupDir, "${filePath}_backup_$timestamp")
+            val originalFile = File(filePath)
             
             if (originalFile.exists()) {
                 originalFile.copyTo(backupFile)
                 
                 // Clean up old backups if we have too many
                 val backupFiles = backupDir.listFiles { file ->
-                    file.name.startsWith("${config.dataFilePath}_backup_")
+                    file.name.startsWith("${filePath}_backup_")
                 }?.sortedByDescending { it.lastModified() }
                 
                 backupFiles?.let { files ->
