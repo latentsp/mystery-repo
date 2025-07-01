@@ -1,0 +1,8 @@
+CIPHER KEY: Caesar Cipher with shift +3
+
+Each letter in the alphabet is shifted 3 positions forward:
+A -> D, B -> E, C -> F, ..., X -> A, Y -> B, Z -> C
+
+Special characters (numbers, punctuation, emojis, spaces) remain unchanged.
+
+To decrypt: Shift each letter 3 positions backward in the alphabet. 

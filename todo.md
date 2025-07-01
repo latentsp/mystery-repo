@@ -1,29 +1,29 @@
-# 🎯 Exercise Objective
+# 🎯 H[HUFLVH 2EMHFWLYH
 
-> **Note:** This repository is too large to complete manually within the time constraints. AI assistance is required.
+> **1RWH:** 7KLV UHSRVLWRU\ LV WRR ODUJH WR FRPSOHWH PDQXDOO\ ZLWKLQ WKH WLPH FRQVWUDLQWV. $, DVVLVWDQFH LV UHTXLUHG.
 
-## 📋 Task Overview
+## 📋 7DVN 2YHUYLHZ
 
-1. **Find the cypher** 🔍
-2. **Translate with the cypher** to discover the todo task list below
-3. **Answer the question:** What does this app even do?
-4. **Improve the app** following the task list below
+1. **ILQG WKH F\SKHU** 🔍
+2. **7UDQVODWH ZLWK WKH F\SKHU** WR GLVFRYHU WKH WRGR WDVN OLVW EHORZ
+3. **$QVZHU WKH TXHVWLRQ:** :KDW GRHV WKLV DSS HYHQ GR"
+4. **,PSURYH WKH DSS** IROORZLQJ WKH WDVN OLVW EHORZ
 
 ---
 
-## 🛠️ Implementation Tasks
+## 🛠️ ,PSOHPHQWDWLRQ 7DVNV
 
-### ⚙️ Configuration
-- [ ] Change default configuration - autosave
-- [ ] Change interactive model to be the default
+### ⚙️ &RQILJXUDWLRQ
+- [ ] &KDQJH GHIDXOW FRQILJXUDWLRQ - DXWRVDYH
+- [ ] &KDQJH LQWHUDFWLYH PRGHO WR EH WKH GHIDXOW
 
-### 🐛 Bug Fixes
-- [ ] Fix priority display 
-- [ ] Improve the CLI
-- [ ] Integration with OpenAI
-- [ ] When booting up should load files from last run
+### 🐛 %XJ )L[HV
+- [ ] )L[ SULRULW\ GLVSOD\ 
+- [ ] ,PSURYH WKH &/,
+- [ ] ,QWHJUDWLRQ ZLWK 2SHQ$,
+- [ ] :KHQ ERRWLQJ XS VKRXOG ORDG ILOHV IURP ODVW UXQ
 
-### ✨ Functionality Enhancements
-- [ ] Add filter capability
-- [ ] Measure average time to complete a task
-- [ ] Add export to CSV
+### ✨ )XQFWLRQDOLW\ (QKDQFHPHQWV
+- [ ] $GG ILOWHU FDSDELOLW\
+- [ ] 0HDVXUH DYHUDJH WLPH WR FRPSOHWH D WDVN
+- [ ] $GG H[SRUW WR &69
