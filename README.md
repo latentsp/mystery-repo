@@ -179,9 +179,12 @@ Here are some ideas to extend this project:
 This project is open source and available under the MIT License. 
 
 
-
+./gradlew clean
 ./gradlew distZip
 unzip build/distributions/mystery-repo-1.0-SNAPSHOT.zip
 ./mystery-repo-1.0-SNAPSHOT/bin/mystery-repo
+
+unzip build/distributions/mystery-repo-1.0-SNAPSHOT.zip
+./mystery-repo-1.0-SNAPSHOT/bin/mystery-repo --interactive
 
 ./gradlew test --tests TodoManagerTest
