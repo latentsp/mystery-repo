@@ -57,3 +57,6 @@ mystery-repo-1.0-SNAPSHOT/
 *.temp 
 my-tasks.txt
 backups/
+
+# Java heap dumps
+*.hprof
