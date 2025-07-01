@@ -16,6 +16,5 @@ As an AI developer, your job is to **fix and improve** this codebase.
 ## Getting Started
 
 - Review the codebase structure
-- Check `todo.md` for specific tasks
-- Use AI assistance to understand complex parts
-- Test your changes thoroughly
+- Check `todo.md` for specific tasks (figure out how to decrypt it)
+- Use AI assistance to solve it in the given time frame
