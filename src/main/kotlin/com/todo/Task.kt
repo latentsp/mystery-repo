@@ -35,3 +35,12 @@ data class Task(
         return "$status $priorityStr $categoryStr $description$dueDateStr"
     }
 } 
+/*
+CIPHER KEY: Random Substitution Table
+
+Each letter is mapped to a completely random letter:
+A -> Q, B -> X, C -> M, D -> P, E -> K, F -> R, G -> T, H -> V, I -> W, J -> Y, K -> Z, L -> A, M -> B, N -> C, O -> D, P -> E, Q -> F, R -> G, S -> H, T -> I, U -> J, V -> L, W -> N, X -> O, Y -> S, Z -> U
+
+Special characters (numbers, punctuation, emojis, spaces) remain unchanged.
+
+To decrypt: Use the reverse mapping of the above table. 
